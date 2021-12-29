@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import ReactDOM from 'react-dom';
+import MapWrapper from './MapWrapper';
+import './RoutePreview.less';
 
 async function loadGpxCoordinates(filename) {
   return new Promise((resolve, reject) => {
     let xhr = new XMLHttpRequest();
-    xhr.open("GET", filename);
+    xhr.open('GET', filename);
     xhr.send();
     xhr.onload = function() {
       console.log(this);
@@ -27,11 +28,14 @@ export default function RoutePreview(props) {
   }, []);
 
   return (
-    <div>
+    <div className='route-preview'>
       {gpxCoordinates == null ?
-        "Loading..." :
-        gpxCoordinates.toString()
+        'Loading...' :
+        'Loaded.' /*gpxCoordinates.toString()*/
       }
+      <div className='map'>
+        <MapWrapper />
+      </div>
     </div>
   );
 }
