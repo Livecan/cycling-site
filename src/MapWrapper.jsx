@@ -2,6 +2,22 @@ import React from "react";
 import GoogleMapReact from 'google-map-react';
 
 export default function MapWrapper(props) {
+
+  function renderPolylines(map, maps) {
+    /** Example of rendering non geodesic polyline (straight line) */
+    let nonGeodesicPolyline = new maps.Polyline({
+      path:
+        props.route.map((point) =>
+          { return {lat: point.lat, lng: point.lon} }
+        ),
+      geodesic: false,
+      strokeColor: 'red',
+      strokeOpacity: 0.7,
+      strokeWeight: 3
+    });
+    nonGeodesicPolyline.setMap(map);
+  }
+
   return (
     <React.Fragment>
       <div>Map</div>
@@ -14,7 +30,8 @@ export default function MapWrapper(props) {
               lat: -1.955,
               lng: 30.086
             }}
-            defaultZoom={13}/>
+            defaultZoom={13}
+            onGoogleApiLoaded={({map, maps}) => renderPolylines(map, maps)} />
       }
     </React.Fragment>
   );

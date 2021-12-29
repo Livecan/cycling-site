@@ -2,15 +2,15 @@ import React, { useEffect, useState } from 'react';
 import MapWrapper from './MapWrapper';
 import './RoutePreview.less';
 
-async function loadGpxCoordinates(filename) {
+// @todo Maybe include gpx parsing in this method and rename it accordingly
+async function loadGpxFile(filename) {
   return new Promise((resolve, reject) => {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', filename);
     xhr.send();
     xhr.onload = function() {
-      console.log(this);
       if (this.status == 200) {
-        resolve(xhr.responseText);
+        resolve(xhr.responseXML);
       }
       else {
         reject(this);
@@ -19,11 +19,30 @@ async function loadGpxCoordinates(filename) {
   });
 }
 
+function parseGpx(gpx) {
+  // @todo This should probably be written more neatly, potentially use a 3rd party xml parser
+  var trkPts = gpx.evaluate('//df:trkseg/*', gpx, function(prefix) { if (prefix === "df") return "http://www.topografix.com/GPX/1/1"; }, XPathResult.ANY_TYPE, null);
+
+  let path = [];
+
+  let trkPt;
+  while (trkPt = trkPts.iterateNext()) {
+    path.push(
+      {
+        lat: Number.parseFloat(trkPt.attributes['lat'].value),
+        lon: Number.parseFloat(trkPt.attributes['lon'].value),
+        ele: Number.parseFloat(trkPt.getElementsByTagName('ele')[0].textContent)
+      }
+    );
+  }
+  return path;
+}
+
 export default function RoutePreview(props) {
   const [gpxCoordinates, setGpxCoordinates] = useState(null);
 
   useEffect(() => {
-    loadGpxCoordinates('../src/Evening_Ride.gpx')
+    loadGpxFile('../src/Evening_Ride.gpx')
       .then(parsedGpx => setGpxCoordinates(parsedGpx));
   }, []);
 
@@ -34,7 +53,7 @@ export default function RoutePreview(props) {
         'Loaded.' /*gpxCoordinates.toString()*/
       }
       <div className='map'>
-        <MapWrapper />
+        <MapWrapper route={gpxCoordinates != null ? parseGpx(gpxCoordinates) : []} />
       </div>
     </div>
   );
