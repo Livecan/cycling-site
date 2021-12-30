@@ -1,60 +1,54 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { getHaversineDistance } from './helpers/gps';
 import MapWrapper from './MapWrapper';
+import GpxObject from './data/GpxObject.js';
 import './RoutePreview.less';
 
-// @todo Maybe include gpx parsing in this method and rename it accordingly
-async function loadGpxFile(filename) {
-  return new Promise((resolve, reject) => {
-    let xhr = new XMLHttpRequest();
-    xhr.open('GET', filename);
-    xhr.send();
-    xhr.onload = function() {
-      if (this.status == 200) {
-        resolve(xhr.responseXML);
-      }
-      else {
-        reject(this);
-      }
-    };
-  });
-}
-
-function parseGpx(gpx) {
-  // @todo This should probably be written more neatly, potentially use a 3rd party xml parser
-  var trkPts = gpx.evaluate('//df:trkseg/*', gpx, function(prefix) { if (prefix === "df") return "http://www.topografix.com/GPX/1/1"; }, XPathResult.ANY_TYPE, null);
-
-  let path = [];
-
-  let trkPt;
-  while (trkPt = trkPts.iterateNext()) {
-    path.push(
-      {
-        lat: Number.parseFloat(trkPt.attributes['lat'].value),
-        lon: Number.parseFloat(trkPt.attributes['lon'].value),
-        ele: Number.parseFloat(trkPt.getElementsByTagName('ele')[0].textContent)
-      }
-    );
-  }
-  return path;
-}
-
 export default function RoutePreview(props) {
-  const [gpxCoordinates, setGpxCoordinates] = useState(null);
+  const [gpxCoordinates, setGpxCoordinates] = useState([]);
+
+  const distance = useMemo(
+    () => {
+      let cummulativeDistance = 0;
+      for (let i = 1; i < gpxCoordinates.length; i++) {
+        cummulativeDistance += getHaversineDistance(
+          gpxCoordinates[i - 1].lat,
+          gpxCoordinates[i - 1].lon,
+          gpxCoordinates[i].lat,
+          gpxCoordinates[i].lon
+        );
+      }
+      return cummulativeDistance;
+    },
+    [gpxCoordinates]
+  );
 
   useEffect(() => {
-    loadGpxFile('../src/Evening_Ride.gpx')
+    GpxObject.loadFromFile('../src/Evening_Ride.gpx')
       .then(parsedGpx => setGpxCoordinates(parsedGpx));
   }, []);
 
   return (
     <div className='route-preview'>
+      <h2>Route Preview</h2>
       {gpxCoordinates == null ?
         'Loading...' :
-        'Loaded.' /*gpxCoordinates.toString()*/
+        <div className="route-preview--grid">
+          <div className='map'>
+            <MapWrapper route={gpxCoordinates != null ? gpxCoordinates : []} />
+          </div>
+          <div className='info'>
+            <table>
+              <tbody>
+                <tr>
+                  <td>Distance:</td>
+                  <td>{distance.toFixed(2)} km</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       }
-      <div className='map'>
-        <MapWrapper route={gpxCoordinates != null ? parseGpx(gpxCoordinates) : []} />
-      </div>
     </div>
   );
 }
