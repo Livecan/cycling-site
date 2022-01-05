@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { getHaversineDistance } from './helpers/gps';
 import MapWrapper from './MapWrapper';
 import GpxObject from './data/GpxObject.js';
-import './RoutePreview.less';
+import { Box, Divider, Grid, Paper, Stack, TextField, Typography } from '@mui/material';
 
 export default function RoutePreview(props) {
   const [gpxCoordinates, setGpxCoordinates] = useState([]);
@@ -30,24 +30,29 @@ export default function RoutePreview(props) {
 
   return (
     <div className='route-preview'>
-      <h2>Route Preview</h2>
+      <Typography variant="h2">
+        Route Preview
+      </Typography>
       {gpxCoordinates == null ?
         'Loading...' :
-        <div className="route-preview--grid">
-          <div className='map'>
-            <MapWrapper route={gpxCoordinates != null ? gpxCoordinates : []} />
-          </div>
-          <div className='info'>
-            <table>
-              <tbody>
-                <tr>
-                  <td>Distance:</td>
-                  <td>{distance.toFixed(2)} km</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <Box sx={{ flexGrow: 1 }}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={4}>
+              <div className='map'>
+                <MapWrapper route={gpxCoordinates != null ? gpxCoordinates : []} />
+              </div>
+            </Grid>
+            <Grid item xs={12} md={8}>
+              <Stack>
+                <Paper>
+                  Distance
+                  <TextField disabled value={`${distance.toFixed(2)} km`} />
+                </Paper>
+                <Divider />
+              </Stack>
+            </Grid>
+          </Grid>
+        </Box>
       }
     </div>
   );

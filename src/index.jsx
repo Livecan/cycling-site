@@ -8,4 +8,4 @@ function WelcomePage(props) {
   );
 }
 
-ReactDOM.render(<WelcomePage />, document.getElementById("root"));
+ReactDOM.render(<WelcomePage />, document.getElementById("app"));
