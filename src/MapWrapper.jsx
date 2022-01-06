@@ -21,8 +21,7 @@ export default function MapWrapper(props) {
 
   return (
     <React.Fragment>
-      <div>Map</div>
-      {true ? //useEmptyMap?
+      {false ? //useEmptyMap?
         <svg style={{width: '100%', height: '100%'}}>
           <rect style={{width: '100%', height: '100%', fill:'rgb(127,127,256)', strokeWidth: 3, stroke: 'rgb(0,0,0)'}} />
         </svg> :
