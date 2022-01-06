@@ -1,11 +1,5 @@
 import React from "react";
 import ReactDOM from 'react-dom';
-import RoutePreview from "./RoutePreview";
+import App from "./App";
 
-function WelcomePage(props) {
-  return (
-    <RoutePreview />
-  );
-}
-
-ReactDOM.render(<WelcomePage />, document.getElementById("app"));
+ReactDOM.render(<App />, document.getElementById("app"));
