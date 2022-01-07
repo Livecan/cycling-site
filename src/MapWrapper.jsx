@@ -1,23 +1,36 @@
-import React from "react";
+import React, { useMemo } from "react";
 import GoogleMapReact from 'google-map-react';
-import * as config from './config.json';
+import config from './config.json';
 
-export default function MapWrapper(props) {
-
-  function renderPolylines(map, maps) {
+function getDrawRoute(path) {
+  return function drawRoute(map, maps) {
     /** Example of rendering non geodesic polyline (straight line) */
     let nonGeodesicPolyline = new maps.Polyline({
-      path:
-        props.route.map((point) =>
-          { return {lat: point.lat, lng: point.lon} }
-        ),
+      path: path,
       geodesic: false,
       strokeColor: 'red',
       strokeOpacity: 0.7,
       strokeWeight: 3
     });
+
     nonGeodesicPolyline.setMap(map);
+
+    let bounds = new google.maps.LatLngBounds();
+    for (let point of path) {
+      bounds.extend(point);
+    }
+    map.fitBounds(bounds);
   }
+}
+
+export default function MapWrapper(props) {
+
+  const path = useMemo(
+    () => props.route.map((point) =>
+      { return {lat: point.lat, lng: point.lon} }
+    ),
+    [props.route]
+  );
 
   return (
     <React.Fragment>
@@ -31,8 +44,9 @@ export default function MapWrapper(props) {
               lat: -1.955,
               lng: 30.086
             }}
-            defaultZoom={13}
-            onGoogleApiLoaded={({map, maps}) => renderPolylines(map, maps)} />
+            defaultZoom={9}
+            onGoogleApiLoaded={({map, maps}) => getDrawRoute(path)(map, maps)}
+            />
       }
     </React.Fragment>
   );
