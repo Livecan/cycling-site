@@ -1,7 +1,21 @@
 import React from "react";
+import { Typography, Container } from "@mui/material";
+import { Route, Routes } from "react-router-dom";
+import RoutePreview from "./RoutePreview";
+import TopBar from "./TopBar";
 
-export function App() {
+export default function App() {
   return (
-    <RoutePreview />
+    <React.Fragment>
+      <TopBar />
+      <Container maxWidth="md">
+        <Routes>
+          <Route exact path="/" element={<Typography variant="body1">Home</Typography>} />
+          <Route path="/routes" element={<RoutePreview />} />
+          <Route path="/ready-for-rwanda" element={<Typography variant="body1">Ready for Rwanda</Typography>} />
+        </Routes>
+      </Container>
+
+    </React.Fragment>
   );
 }
