@@ -67,7 +67,7 @@ export default function RoutePreview(props) {
             <Grid item xs={12} sm={6} md={4}>
               <Stack divider={<Divider />}>
                 {displayData.map(info =>
-                  <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+                  <Box key={info.label} sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
                     <Typography variant="body1" align="left">{info.label}</Typography>
                     <Typography variant="body1" align="right">{info.value}</Typography>
                   </Box>
