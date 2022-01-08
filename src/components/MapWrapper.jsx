@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import GoogleMapReact from 'google-map-react';
-import config from './config.json';
+import config from '../config.json';
 
 function getDrawRoute(path) {
   return function drawRoute(map, maps) {
@@ -14,6 +14,18 @@ function getDrawRoute(path) {
     });
 
     nonGeodesicPolyline.setMap(map);
+
+    new maps.Marker({
+      position: path[0],
+      label: 'A',
+      map: map
+    });
+
+    new maps.Marker({
+      position: path[path.length - 1],
+      label: 'B',
+      map: map
+    });
 
     let bounds = new google.maps.LatLngBounds();
     for (let point of path) {
@@ -34,20 +46,16 @@ export default function MapWrapper(props) {
 
   return (
     <React.Fragment>
-      {false ? //useEmptyMap?
-        <svg style={{width: '100%', height: '100%'}}>
-          <rect style={{width: '100%', height: '100%', fill:'rgb(127,127,256)', strokeWidth: 3, stroke: 'rgb(0,0,0)'}} />
-        </svg> :
-        // @todo Hide API key
-        <GoogleMapReact bootstrapURLKeys={{key: config.maps["google-api-key"]}}
-            defaultCenter={{
-              lat: -1.955,
-              lng: 30.086
-            }}
-            defaultZoom={9}
-            onGoogleApiLoaded={({map, maps}) => getDrawRoute(path)(map, maps)}
-            />
-      }
+      {/* @todo Hide API key */}
+      <GoogleMapReact bootstrapURLKeys={{key: config.maps["google-api-key"]}}
+          defaultCenter={{
+            lat: -1.955,
+            lng: 30.086
+          }}
+          defaultZoom={9}
+          onGoogleApiLoaded={({map, maps}) => getDrawRoute(path)(map, maps)}
+      >
+      </GoogleMapReact>
     </React.Fragment>
   );
 }
