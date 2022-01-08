@@ -8,7 +8,7 @@ export default function App() {
   return (
     <React.Fragment>
       <TopBar />
-      <Container maxWidth="md">
+      <Container maxWidth="lg">
         <Routes>
           <Route exact path="/" element={<Typography variant="body1">Home</Typography>} />
           <Route path="/routes" element={<RoutePreview />} />

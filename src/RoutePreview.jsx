@@ -1,8 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { getHaversineDistance } from './helpers/gps';
-import MapWrapper from './MapWrapper';
+import MapWrapper from './components/MapWrapper';
 import GpxObject from './data/GpxObject.js';
 import { Box, Divider, Grid, Stack, Typography, useTheme } from '@mui/material';
+import RoutesList from './components/RoutesList';
+import ElevationChart from './components/ElevationChart';
 
 const mapBoxStyle = (theme) => {
   return {
@@ -10,9 +12,6 @@ const mapBoxStyle = (theme) => {
     [theme.breakpoints.up('sm')]: {
       height: "350px"
     },
-    [theme.breakpoints.up('md')]: {
-      height: "500px"
-    }
   }
 }
 
@@ -34,7 +33,6 @@ export default function RoutePreview(props) {
     },
     [gpxCoordinates]
   );
-
   const displayData = [
     {label: 'Distance', value: `${distance.toFixed(2)} km`},
     // @todo: Calculate these from the file
@@ -49,30 +47,42 @@ export default function RoutePreview(props) {
   }, []);
 
   const theme = useTheme();
-
+console.log(gpxCoordinates);
   return (
     <div className='route-preview'>
       <Typography variant="h2">
-        Route Preview
+        Routes - Route 0  {/* @todo Get this from the route name from data source */}
       </Typography>
       {gpxCoordinates == null ?
         'Loading...' :
-        <Box sx={{ flexGrow: 1 }}>
+        <Box sx={{ flexGrow: 1, display: 'flex' }}>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6} md={8}>
-              <Box sx={mapBoxStyle(theme)} >
-                <MapWrapper route={gpxCoordinates != null ? gpxCoordinates : []} />
-              </Box>
+            <Grid item xs={2}>
+              <RoutesList />
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <Stack divider={<Divider />}>
-                {displayData.map(info =>
-                  <Box key={info.label} sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <Typography variant="body1" align="left">{info.label}</Typography>
-                    <Typography variant="body1" align="right">{info.value}</Typography>
+            <Grid item xs={10}>
+              <Grid container spacing={2}>
+                <Grid item xs={8}>
+                  <Box sx={mapBoxStyle(theme)} >
+                    <MapWrapper route={gpxCoordinates != null ? gpxCoordinates : []} />
                   </Box>
-                )}
-              </Stack>
+                </Grid>
+                <Grid item xs={4}>
+                  <Stack divider={<Divider />}>
+                    {displayData.map(info =>
+                      <Box key={info.label} sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+                        <Typography variant="body1" align="left">{info.label}</Typography>
+                        <Typography variant="body1" align="right">{info.value}</Typography>
+                      </Box>
+                    )}
+                  </Stack>
+                </Grid>
+                <Grid item xs={12}>
+                  <ElevationChart dataSource={
+                    gpxCoordinates.map(point => { return {arg: point.distance, val: point.ele} })
+                  } />
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
         </Box>
