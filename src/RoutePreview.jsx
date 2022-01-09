@@ -2,9 +2,10 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { getHaversineDistance } from './helpers/gps';
 import MapWrapper from './components/MapWrapper';
 import GpxObject from './data/GpxObject.js';
-import { Box, Divider, Grid, Stack, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import RoutesList from './components/RoutesList';
 import ElevationChart from './components/ElevationChart';
+import RouteInfo from './components/RouteInfo';
 
 const mapBoxStyle = (theme) => {
   return {
@@ -47,7 +48,7 @@ export default function RoutePreview(props) {
   }, []);
 
   const theme = useTheme();
-console.log(gpxCoordinates);
+
   return (
     <div className='route-preview'>
       <Typography variant="h2">
@@ -62,20 +63,11 @@ console.log(gpxCoordinates);
             </Grid>
             <Grid item xs={10}>
               <Grid container spacing={2}>
-                <Grid item xs={8}>
-                  <Box sx={mapBoxStyle(theme)} >
-                    <MapWrapper route={gpxCoordinates != null ? gpxCoordinates : []} />
-                  </Box>
+                <Grid item xs={8} sx={mapBoxStyle(theme)}>
+                  <MapWrapper route={gpxCoordinates != null ? gpxCoordinates : []} />
                 </Grid>
                 <Grid item xs={4}>
-                  <Stack divider={<Divider />}>
-                    {displayData.map(info =>
-                      <Box key={info.label} sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-                        <Typography variant="body1" align="left">{info.label}</Typography>
-                        <Typography variant="body1" align="right">{info.value}</Typography>
-                      </Box>
-                    )}
-                  </Stack>
+                  <RouteInfo distance={28.17} speed={3} elevation={220} description="Wednesday morning classic, all welcome, non-drop ride." />
                 </Grid>
                 <Grid item xs={12}>
                   <ElevationChart dataSource={
