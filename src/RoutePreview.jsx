@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getHaversineDistance } from './helpers/gps';
 import MapWrapper from './components/MapWrapper';
 import GpxObject from './data/GpxObject.js';
@@ -17,34 +17,12 @@ const mapBoxStyle = (theme) => {
 }
 
 export default function RoutePreview(props) {
-  const [gpxCoordinates, setGpxCoordinates] = useState([]);
-
-  const distance = useMemo(
-    () => {
-      let cummulativeDistance = 0;
-      for (let i = 1; i < gpxCoordinates.length; i++) {
-        cummulativeDistance += getHaversineDistance(
-          gpxCoordinates[i - 1].lat,
-          gpxCoordinates[i - 1].lon,
-          gpxCoordinates[i].lat,
-          gpxCoordinates[i].lon
-        );
-      }
-      return cummulativeDistance;
-    },
-    [gpxCoordinates]
-  );
-  const displayData = [
-    {label: 'Distance', value: `${distance.toFixed(2)} km`},
-    // @todo: Calculate these from the file
-    {label: 'Elevation gain', value: `220 m`},
-    {label: 'Estimated time', value: `0:45`},
-  ];
+  const [routeObject, setRouteObject] = useState(null);
 
   useEffect(() => {
     // @todo: Get a file that would have reduced number of points and use Google roads for drawing route
-    GpxObject.loadFromFile('../src/Evening_Ride.gpx')
-      .then(parsedGpx => setGpxCoordinates(parsedGpx));
+    GpxObject.loadFromFile('../src/Croissant_Loop.gpx')
+      .then(routeObject => setRouteObject(routeObject));
   }, []);
 
   const theme = useTheme();
@@ -54,7 +32,7 @@ export default function RoutePreview(props) {
       <Typography variant="h2">
         Routes - Route 0  {/* @todo Get this from the route name from data source */}
       </Typography>
-      {gpxCoordinates == null ?
+      {routeObject == null ?
         'Loading...' :
         <Box sx={{ flexGrow: 1, display: 'flex' }}>
           <Grid container spacing={2}>
@@ -64,14 +42,14 @@ export default function RoutePreview(props) {
             <Grid item xs={10}>
               <Grid container spacing={2}>
                 <Grid item xs={8} sx={mapBoxStyle(theme)}>
-                  <MapWrapper route={gpxCoordinates != null ? gpxCoordinates : []} />
+                  <MapWrapper route={routeObject?.path != null ? routeObject.path : []} />
                 </Grid>
                 <Grid item xs={4}>
-                  <RouteInfo distance={28.17} speed={3} elevation={220} description="Wednesday morning classic, all welcome, non-drop ride." />
+                  <RouteInfo distance={routeObject.distance} speed={3} elevation={220} description="Wednesday morning classic, all welcome, non-drop ride." />
                 </Grid>
                 <Grid item xs={12}>
                   <ElevationChart dataSource={
-                    gpxCoordinates.map(point => { return {arg: point.distance, val: point.ele} })
+                    routeObject.path.map(point => { return {arg: point.distance, val: point.ele} })
                   } />
                 </Grid>
               </Grid>

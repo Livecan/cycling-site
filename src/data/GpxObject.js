@@ -1,6 +1,17 @@
 import { getHaversineDistance } from "../helpers/gps";
 
 export default class GpxObject {
+  path;
+
+  get distance() {
+    return this.path[this.path.length - 1].distance;
+  }
+
+  // @todo Move calculating distance to the constructor method from parseGpx
+  constructor(path) {
+    this.path = path;
+  }
+
   static #loadGpxFile(filename) {
     return new Promise((resolve, reject) => {
       let xhr = new XMLHttpRequest();
@@ -30,15 +41,15 @@ export default class GpxObject {
         lon: Number.parseFloat(trkPt.attributes['lon'].value),
         ele: Number.parseFloat(trkPt.getElementsByTagName('ele')[0].textContent)
       };
-      let lastPoint = path[path.length - 1];
-      cummulativeDistance = path.length > 0 ? cummulativeDistance + getHaversineDistance(
-        lastPoint.lat,
-        lastPoint.lon,
-        currentPoint.lat,
-        currentPoint.lon) : 0;
-
+      if (path.length > 0) {
+        let lastPoint = path[path.length - 1];
+        cummulativeDistance += getHaversineDistance(
+          lastPoint.lat,
+          lastPoint.lon,
+          currentPoint.lat,
+          currentPoint.lon);
+      }
       currentPoint.distance = cummulativeDistance;
-
       path.push(
         currentPoint
       );
@@ -49,6 +60,6 @@ export default class GpxObject {
 
   static async loadFromFile(filename) {
     let gpxDocument = await this.#loadGpxFile(filename);
-    return this.#parseGpx(gpxDocument);
+    return new GpxObject(this.#parseGpx(gpxDocument));
   }
 }
