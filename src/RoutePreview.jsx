@@ -21,35 +21,41 @@ export default function RoutePreview(props) {
 
   useEffect(() => {
     // @todo: Get a file that would have reduced number of points and use Google roads for drawing route
-    GpxObject.loadFromFile('../src/Croissant_Loop.gpx')
+    GpxObject.loadFromJson('../src/routes/Croissant_Loop.json')
       .then(routeObject => setRouteObject(routeObject));
   }, []);
-
   const theme = useTheme();
 
   return (
     <div className='route-preview'>
       <Typography variant="h2">
-        Routes - Route 0  {/* @todo Get this from the route name from data source */}
+        Routes{routeObject != null && ` - ${routeObject.title}`}  {/* @todo Get this from the route name from data source */}
       </Typography>
       {routeObject == null ?
         'Loading...' :
         <Box sx={{ flexGrow: 1, display: 'flex' }}>
           <Grid container spacing={2}>
-            <Grid item xs={2}>
+            <Grid item xs={12} md={2}>
               <RoutesList />
             </Grid>
-            <Grid item xs={10}>
+            <Grid item xs={12} md={10}>
               <Grid container spacing={2}>
-                <Grid item xs={8} sx={mapBoxStyle(theme)}>
-                  <MapWrapper route={routeObject?.path != null ? routeObject.path : []} />
+                <Grid item xs={12} md={8} sx={mapBoxStyle(theme)}>
+                  <MapWrapper route={routeObject?.route != null ? routeObject.route : []} />
                 </Grid>
-                <Grid item xs={4}>
-                  <RouteInfo distance={routeObject.distance} speed={3} elevation={220} description="Wednesday morning classic, all welcome, non-drop ride." />
+                <Grid item xs={12} md={4}>
+                  <RouteInfo
+                    distance={routeObject.distance}
+                    elevation={routeObject.elevation}
+                    speedIndex={routeObject.speedIndex}
+                    climbIndex={routeObject.climbIndex}
+                    description={routeObject.description}
+                    download={routeObject.gpx}
+                  />
                 </Grid>
                 <Grid item xs={12}>
                   <ElevationChart dataSource={
-                    routeObject.path.map(point => { return {arg: point.distance, val: point.ele} })
+                    routeObject.route.map(point => { return {arg: point.distance, val: point.ele} })
                   } />
                 </Grid>
               </Grid>
