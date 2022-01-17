@@ -1,6 +1,5 @@
-import React, { useMemo } from "react";
-import GoogleMapReact from 'google-map-react';
-import config from '../config.json';
+import React, { useEffect, useMemo, useState } from "react";
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
 function getDrawRoute(path) {
   return function drawRoute(map, maps) {
@@ -35,6 +34,13 @@ function getDrawRoute(path) {
   }
 }
 
+window.initMap = () => {
+  let map = new google.maps.Map(document.getElementById("map"), {
+    center: { lat: -34.397, lng: 150.644 },
+    zoom: 8,
+  });
+}
+
 export default function MapWrapper(props) {
 
   const path = useMemo(
@@ -46,16 +52,17 @@ export default function MapWrapper(props) {
 
   return (
     <React.Fragment>
-      {/* @todo Hide API key */}
-      <GoogleMapReact bootstrapURLKeys={{key: config.maps["google-api-key"]}}
-          defaultCenter={{
-            lat: -1.955,
-            lng: 30.086
-          }}
-          defaultZoom={9}
-          onGoogleApiLoaded={({map, maps}) => getDrawRoute(path)(map, maps)}
-      >
-      </GoogleMapReact>
+      <MapContainer style={{height: "100%", width: "100%", overflow: "hidden"}} center={[51.505, -0.09]} zoom={13} scrollWheelZoom={true}>
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <Marker position={[51.505, -0.09]}>
+          <Popup>
+            A pretty CSS3 popup. <br /> Easily customizable.
+          </Popup>
+        </Marker>
+      </MapContainer>
     </React.Fragment>
   );
 }
