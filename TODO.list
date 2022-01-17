@@ -8,3 +8,6 @@ use NodeJS & Express for generating Google Maps on server and hiding API key
 -- Links to different things (The Shop, Imbaraga)
 -- Cycling teams and regular meetups in Kigali (low priority)
 Rewrite at least one component in Typescript
+figure out how not to expose Google API key
+design architecture
+- load route details from a db?
