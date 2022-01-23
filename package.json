@@ -16,6 +16,7 @@
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
     "@mui/material": "^5.2.7",
+    "axios": "^0.25.0",
     "core-js": "^3.20.1",
     "devextreme": "21.2.4",
     "devextreme-react": "21.2.4",

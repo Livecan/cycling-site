@@ -1,29 +1,34 @@
+import axios from "axios";
 import { getHaversineDistance } from "../helpers/gps";
+
+const routesListIndex = "../src/routes/route_index.json";
 
 export default class GpxObject {
 
-  get distance() {
-    return this.route[this.route.length - 1].distance;
-  }
-
-  get elevation() {
-    if (this.elevationLazy == null) {
-      this.elevationLazy = 0;
-      for (let i = 1; i < this.route.length; i++) {
-        this.elevationLazy += Math.max(0, this.route[i].ele - this.route[i - 1].ele);
-      }
-    }
-    return this.elevationLazy;
-  }
-
   // @todo Move calculating distance to the constructor method from parseGpx
-  constructor({title, gpx, speedIndex, climbIndex, route, description}) {
+  constructor({title, gpx, distance, elevationGain, speedIndex, climbIndex, description, isDefault}) {
     this.title = title;
     this.gpx = gpx;
+    this.distance = distance;
+    this.elevationGain = elevationGain;
     this.speedIndex = speedIndex;
     this.climbIndex = climbIndex;
-    this.route = route;
     this.description = description;
+    this.isDefault = isDefault ?? false;
+  }
+
+  async getRoute() {
+    if (this.route == null) {
+      let gpxFile = await GpxObject.#loadGpxFile(this.gpx);
+      this.route = GpxObject.#calculateCummulativeDistance(GpxObject.#parseGpx(gpxFile));
+    }
+    return this.route;
+  }
+
+  static async loadRoutesList() {
+    let routesList = await axios.get(routesListIndex).catch(e => console.error(`load routes list error: ${e}`));
+    console.log(routesList.data);
+    return routesList.data.routes.map(route => new GpxObject(route));
   }
 
   static async loadFromJson(filepath) {
@@ -34,8 +39,6 @@ export default class GpxObject {
       xhr.onload = async function() {
         if (this.status == 200) {
           let routeJson = JSON.parse(xhr.responseText);
-          let gpxFile = await GpxObject.#loadGpxFile(routeJson.gpx);
-          routeJson.route = GpxObject.#calculateCummulativeDistance(GpxObject.#parseGpx(gpxFile));
           resolve(new GpxObject(routeJson));
         }
         else {
