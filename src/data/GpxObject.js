@@ -26,42 +26,15 @@ export default class GpxObject {
   }
 
   static async loadRoutesList() {
-    let routesList = await axios.get(routesListIndex).catch(e => console.error(`load routes list error: ${e}`));
+    // @todo Consider refactoring the .catch() into a catch block - then there's no mixed approach
+    let routesList = await axios.get(routesListIndex);
     console.log(routesList.data);
     return routesList.data.routes.map(route => new GpxObject(route));
   }
 
-  static async loadFromJson(filepath) {
-    return await new Promise((resolve, reject) => {
-      let xhr = new XMLHttpRequest();
-      xhr.open('GET', filepath);
-      xhr.send();
-      xhr.onload = async function() {
-        if (this.status == 200) {
-          let routeJson = JSON.parse(xhr.responseText);
-          resolve(new GpxObject(routeJson));
-        }
-        else {
-          reject(this);
-        }
-      };
-    });
-  }
-
-  static #loadGpxFile(filename) {
-    return new Promise((resolve, reject) => {
-      let xhr = new XMLHttpRequest();
-      xhr.open('GET', filename);
-      xhr.send();
-      xhr.onload = function() {
-        if (this.status == 200) {
-          resolve(xhr.responseXML);
-        }
-        else {
-          reject(this);
-        }
-      };
-    });
+  static async #loadGpxFile(filename) {
+    let xml = await axios.get(filename);
+    return new DOMParser().parseFromString(xml.data, "text/xml");
   }
 
   static #parseGpx(gpx) {
@@ -84,14 +57,17 @@ export default class GpxObject {
   }
 
   static #calculateCummulativeDistance(path) {
-    path[0].distance = 0;
-    for (let i = 1; i < path.length; i++) {
-      path[i].distance = path[i - 1].distance + getHaversineDistance(
-        path[i - 1].lat,
-        path[i - 1].lon,
-        path[i].lat,
-        path[i].lon
-      );
+    let lastPoint = path[0];
+    lastPoint.distance = 0;
+
+    for (const point of path) {
+      point.distance = lastPoint.distance + getHaversineDistance(
+        lastPoint.lat,
+        lastPoint.lon,
+        point.lat,
+        point.lon
+      )
+      lastPoint = point;
     }
     return path;
   }
