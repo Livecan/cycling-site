@@ -33,7 +33,7 @@ export default function RoutePreview() {
 
   const [route, setRoute] = useState([]);
 
-  function selectRoute (route) {
+  function selectRoute(route) {
     setSelectedRoute(route);
     route.getRoute().then(route => setRoute(route));
   }
@@ -45,12 +45,12 @@ export default function RoutePreview() {
       </Typography>
       <Box sx={{ flexGrow: 1, display: 'flex' }}>
         <Grid container spacing={2}>
-          <Grid item xs={12} md={2}>
+          <Grid item xs={12} md={3}>
             <RoutesList routesList={routesList} onSelectRoute={selectRoute} />
           </Grid>
           {selectedRoute == null ?
             'Loading...' :  /* @todo: Make some fancier loader */
-            <Grid item xs={12} md={10}>
+            <Grid item xs={12} md={9}>
               <Grid container spacing={2}>
                 <Grid item xs={12} md={8} sx={mapBoxStyle(theme)}>
                   <MapWrapper route={route} />

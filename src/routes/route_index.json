@@ -9,6 +9,15 @@
       "speedIndex": 2,
       "climbIndex": 3,
       "description": "Wednesday morning classic, all welcome, non-drop ride."
+    },
+    {
+      "title": "Rukomo roundabout",
+      "gpx": "../src/routes/Rukomo_Roundabout.gpx",
+      "distance": 96.8,
+      "elevationGain": 1140,
+      "speedIndex": 3,
+      "climbIndex": 3,
+      "description": "Nice calm roads up north. Enjoy some chapatti at the roundabout."
     }
   ]
 }

@@ -37,11 +37,8 @@ function getDrawRoute(path) {
 
 export default function MapWrapper(props) {
 
-  const path = useMemo(
-    () => props.route.map((point) =>
-      { return {lat: point.lat, lng: point.lon} }
-    ),
-    [props.route]
+  const path = props.route.map((point) =>
+    { return {lat: point.lat, lng: point.lon} }
   );
 
   return (

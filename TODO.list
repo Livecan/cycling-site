@@ -11,3 +11,10 @@ Rewrite at least one component in Typescript
 figure out how not to expose Google API key
 design architecture
 - load route details from a db?
+
+- tiny issues
+  - use router in App and open RoutePreview via router for changed route (then map should load correctly)
+  - in graph don't use 2.2k for height, write the whole number
+  - figure out responsiveness of grid - should change number of columns when resized
+  - use theme for selected and hover over choices in the left bar
+  - figure out ellipsis for RouterList route names as necessary
