@@ -53,7 +53,7 @@ export default function RoutePreview() {
             <Grid item xs={12} md={9}>
               <Grid container spacing={2}>
                 <Grid item xs={12} md={8} sx={mapBoxStyle(theme)}>
-                  <MapWrapper route={route} />
+                  <MapWrapper key={selectedRoute.gpx} route={route} />
                 </Grid>
                 <Grid item xs={12} md={4}>
                   <RouteInfo
