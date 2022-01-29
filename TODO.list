@@ -18,3 +18,8 @@ design architecture
   - figure out responsiveness of grid - should change number of columns when resized
   - use theme for selected and hover over choices in the left bar
   - figure out ellipsis for RouterList route names as necessary
+  - figure out caching map objects on server when running Node.js
+  - use tabs instead od stack in RoutesList to make it more like a navbar
+  - make POI tab in app with - Croissant start, The Shop, Questions
+  - make gallery
+  - make parallax background in Home page and see how it looks
