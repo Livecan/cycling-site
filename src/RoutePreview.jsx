@@ -46,7 +46,7 @@ export default function RoutePreview() {
       <Box sx={{ flexGrow: 1, display: 'flex' }}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={3}>
-            <RoutesList routesList={routesList} onSelectRoute={selectRoute} />
+            <RoutesList routesList={routesList} selectedRoute={selectedRoute} onSelectRoute={selectRoute} />
           </Grid>
           {selectedRoute == null ?
             'Loading...' :  /* @todo: Make some fancier loader */
