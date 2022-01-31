@@ -1,19 +1,12 @@
 import React from "react";
-import { Typography, Container, createTheme, ThemeProvider } from "@mui/material";
+import { Typography, Container, useTheme, ThemeProvider } from "@mui/material";
 import { Route, Routes } from "react-router-dom";
 import RoutePreview from "./RoutePreview";
 import TopBar from "./TopBar";
 
-const theme = createTheme({
-  palette: {
-    selectableCard: {
-      selected: '#b2daff',
-      onHover: '#82c5ff'
-    }
-  }
-});
-
 export default function App() {
+  const theme = useTheme();
+
   return (
     <React.Fragment>
       <ThemeProvider theme={theme}>
