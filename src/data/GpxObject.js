@@ -28,7 +28,6 @@ export default class GpxObject {
   static async loadRoutesList() {
     // @todo Consider refactoring the .catch() into a catch block - then there's no mixed approach
     let routesList = await axios.get(routesListIndex);
-    console.log(routesList.data);
     return routesList.data.routes.map(route => new GpxObject(route));
   }
 
