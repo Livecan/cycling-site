@@ -3,6 +3,7 @@ import { Typography, Container, useTheme, ThemeProvider } from "@mui/material";
 import { Route, Routes } from "react-router-dom";
 import RoutePreview from "./RoutePreview";
 import TopBar from "./TopBar";
+import MenuRoutes from "./data/MenuRoutes";
 
 export default function App() {
   const theme = useTheme();
@@ -13,9 +14,9 @@ export default function App() {
         <TopBar />
         <Container maxWidth="lg">
           <Routes>
-            <Route exact path="/" element={<Typography variant="body1">Home</Typography>} />
-            <Route path="/routes" element={<RoutePreview />} />
-            <Route path="/ready-for-rwanda" element={<Typography variant="body1">Ready for Rwanda</Typography>} />
+            <Route exact path={MenuRoutes.home.route} element={<Typography variant="body1">Home</Typography>} />
+            <Route path={MenuRoutes.routes.route} element={<RoutePreview />} />
+            <Route path={MenuRoutes.routes.ready} element={<Typography variant="body1">Ready for Rwanda</Typography>} />
           </Routes>
         </Container>
       </ThemeProvider>
