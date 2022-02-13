@@ -14,9 +14,9 @@ export default function App() {
         <TopBar />
         <Container maxWidth="lg">
           <Routes>
-            <Route exact path={MenuRoutes.home.route} element={<Typography variant="body1">Home</Typography>} />
+            <Route index element={<Typography variant="body1">Home</Typography>} />
             <Route path={MenuRoutes.routes.route} element={<RoutePreview />} />
-            <Route path={MenuRoutes.routes.ready} element={<Typography variant="body1">Ready for Rwanda</Typography>} />
+            <Route path={MenuRoutes.ready.route} element={<Typography variant="body1">Ready for Rwanda</Typography>} />
           </Routes>
         </Container>
       </ThemeProvider>
