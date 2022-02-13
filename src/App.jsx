@@ -1,15 +1,16 @@
 import React from "react";
-import { Typography, Container, useTheme, ThemeProvider } from "@mui/material";
+import { Box, Typography, Container, useTheme, ThemeProvider } from "@mui/material";
 import { Route, Routes } from "react-router-dom";
 import RoutePreview from "./RoutePreview";
 import TopBar from "./TopBar";
 import MenuRoutes from "./data/MenuRoutes";
+import bgImage from "./pictures/bg0.jpg";
 
 export default function App() {
   const theme = useTheme();
 
   return (
-    <React.Fragment>
+    <Box sx={{background: `url(${bgImage})`}}>
       <ThemeProvider theme={theme}>
         <TopBar />
         <Container maxWidth="lg">
@@ -20,6 +21,6 @@ export default function App() {
           </Routes>
         </Container>
       </ThemeProvider>
-    </React.Fragment>
+    </Box>
   );
 }

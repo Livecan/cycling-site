@@ -39,6 +39,10 @@ const config = {
         test: /\.gpx$/i,
         use: ['xml-loader'],
       },
+      {
+        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        type: 'asset/resource',
+      },
     ],
   },
 };
