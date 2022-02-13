@@ -1,19 +1,25 @@
 import React from "react";
-import { Box, Typography, Card } from '@mui/material';
-import { useTheme } from "@emotion/react";
+import { Box, Typography, Card, Theme } from '@mui/material';
 
-export default function RouteCard(props) {
-  const theme = useTheme();
+interface RouteCardProps {
+  isSelected: boolean,
+  onClick: VoidFunction,
+  title: string,
+  distance: number,
+  elevationGain: number,
+}
 
-  const routeCardBoxStyle = {
+export default function RouteCard(props: RouteCardProps): JSX.Element {
+  const routeCardBoxStyle = (theme: Theme) => ({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    bgcolor: (props.isSelected && 'action.selected'),
+    cursor: "pointer",
+    bgcolor: (props.isSelected && theme.palette.action.selected),
     '&:hover': {
-      bgcolor: 'action.hover'
+      bgcolor: theme.palette.action.hover
     }
-  };
+  }) as const;
 
   return (
     <Card>
