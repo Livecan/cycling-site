@@ -1,0 +1,59 @@
+{
+  "routes": [
+    {
+      "isDefault": true,
+      "title": "Croissant Loop",
+      "gpx": "../src/routes/Croissant_Loop.gpx",
+      "distance": 24.8,
+      "elevationGain": 398,
+      "speedIndex": 2,
+      "climbIndex": 3,
+      "description": "Wednesday morning classic, all welcome, non-drop ride."
+    },
+    {
+      "title": "Kayonza Roundabout",
+      "gpx": "../src/routes/Kayonza_Roundabout.gpx",
+      "distance": 136,
+      "elevationGain": 1220,
+      "speedIndex": 3,
+      "climbIndex": 3,
+      "description": "Dreadful traffic and lorries. A route towards Akagera National Park."
+    },
+    {
+      "title": "Muhanga",
+      "gpx": "../src/routes/Muhanga.gpx",
+      "distance": 97.7,
+      "elevationGain": 1890,
+      "speedIndex": 2,
+      "climbIndex": 4,
+      "description": "A bit hillier road."
+    },
+    {
+      "title": "Nyirangarama",
+      "gpx": "../src/routes/Nyirangarama.gpx",
+      "distance": 95.5,
+      "elevationGain": 1760,
+      "speedIndex": 4,
+      "climbIndex": 3,
+      "description": "Nice road with climbing in the first half of way out."
+    },
+    {
+      "title": "Nyirangarama Loop",
+      "gpx": "../src/routes/Rukomo_Nyirangarama_Loop.gpx",
+      "distance": 156,
+      "elevationGain": 2500,
+      "speedIndex": 4,
+      "climbIndex": 4,
+      "description": "Long day in the saddle. Few climbs, especially in the beginning."
+    },
+    {
+      "title": "Rukomo Roundabout",
+      "gpx": "../src/routes/Rukomo_Roundabout.gpx",
+      "distance": 96.8,
+      "elevationGain": 1140,
+      "speedIndex": 3,
+      "climbIndex": 3,
+      "description": "Nice calm roads up north. Second half of way out is a long climb."
+    }
+  ]
+}

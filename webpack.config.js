@@ -3,7 +3,7 @@ const isDevMode = process.env.NODE_ENV !== 'production';
 
 const config = {
   entry: {
-    main: ["./src/index.jsx"]
+    main: ["./src/index.tsx"]
   },
   devtool: (isDevMode) ? 'source-map' : false,
   mode: (isDevMode) ? 'development' : 'production',
@@ -12,10 +12,14 @@ const config = {
     filename: '[name].min.js'
   },
   resolve: {
-    extensions: ['.js', '.jsx'],
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
   },
   module: {
     rules: [
+      {
+        test: /\.tsx?$/,
+        loader: 'ts-loader',
+      },
       {
         test: /\.jsx?$/,
         loader: 'babel-loader',
