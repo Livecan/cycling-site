@@ -1,12 +1,16 @@
-const express = require("express");
+import express from "express";
+import axios from "axios";
+import mapsLoader from "@googlemaps/js-api-loader";
+
+import config from "../../../src/config.json";
 
 // recordRoutes is an instance of the express router.
 // We use it to define our routes.
 // The router will be added as a middleware and will take control of requests starting with path /record.
 const recordRoutes = express.Router();
 
-const loader = new (require("@googlemaps/js-api-loader").Loader)({
-  apiKey: require('../../src/config').maps["google-api-key"],
+const loader = new (mapsLoader.Loader)({
+  apiKey: config.maps["google-api-key"],
   version: "weekly",
 });
 
@@ -25,11 +29,11 @@ recordRoutes.route("/map-proxy").get(async function (req, res) {
   // // Append the 'script' element to 'head'
   // document.head.appendChild(script);
 
-  let result = await require('axios').get(`https://maps.googleapis.com/maps/api/js?key=${require('../../src/config').maps["google-api-key"]}&callback=initMap`);
+  let result = await axios.get(`https://maps.googleapis.com/maps/api/js?key=${config.maps["google-api-key"]}&callback=initMap`);
   //console.log(result.data);
 
   res.json(result.data);
 
 });
 
-module.exports = recordRoutes;
+export default recordRoutes;
