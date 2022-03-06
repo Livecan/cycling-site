@@ -17,13 +17,13 @@ app.get('/', (req, res) => {
             <div id="app"></div>
         </body>
         </html>
-    `
+    `;
     res.send(html);
 });
 
 app.use(mapProxy);
 
-app.use(express.static("../dist_dev"));
+app.use(express.static("./dist_dev"));
 
 const port = process.env.PORT || 5000;
 

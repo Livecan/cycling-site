@@ -1,9 +1,10 @@
 const path = require('path');
 const isDevMode = process.env.NODE_ENV !== 'production';
+const nodeExternals = require('webpack-node-externals');
 
 const config = {
   entry: {
-    server: ["./src/server.tsx"]
+    server: ["./server/src/server.tsx"]
   },
   devtool: (isDevMode) ? 'source-map' : false,
   mode: (isDevMode) ? 'development' : 'production',
@@ -15,6 +16,7 @@ const config = {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
   },
   target: 'node',
+  externals: [nodeExternals()],
   resolve: {
     modules: ['node_modules'],
     fallback: {
